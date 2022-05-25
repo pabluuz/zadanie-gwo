@@ -6,6 +6,7 @@ namespace Recruitment\Tests\Entity;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
+use Recruitment\Entity\Exception\InvalidTaxRateException;
 use Recruitment\Entity\Exception\InvalidUnitPriceException;
 use Recruitment\Entity\Product;
 
@@ -29,5 +30,15 @@ class ProductTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $product = new Product();
         $product->setMinimumQuantity(0);
+    }
+
+    /**
+     * @test
+     */
+    public function itThrowsExceptionForInvalidTaxRate(): void
+    {
+        $this->expectException(InvalidTaxRateException::class);
+        $product = new Product();
+        $product->setTaxRate(3);
     }
 }

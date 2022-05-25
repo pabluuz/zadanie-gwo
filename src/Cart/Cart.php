@@ -49,6 +49,15 @@ class Cart
         return $total;
     }
 
+    public function getGrossTotalPrice(): int
+    {
+        $total = 0;
+        foreach ($this->getItems() as $item) {
+            $total += $item->getGrossTotalPrice();
+        }
+        return $total;
+    }
+
     public function checkout(int $id): Order
     {
         $order = new Order($id);

@@ -69,6 +69,11 @@ class Item
         return $this->getQuantity() * $this->getProduct()->getUnitPrice();
     }
 
+    public function getGrossTotalPrice(): int
+    {
+        return $this->getQuantity() * $this->getProduct()->getGrossUnitPrice();
+    }
+
     private function isProductQuantitySufficient(Product $product, int $quantity): bool
     {
         return $quantity >= $product->getMinimumQuantity();

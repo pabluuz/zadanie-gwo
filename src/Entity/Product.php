@@ -3,7 +3,9 @@
 namespace Recruitment\Entity;
 
 use InvalidArgumentException;
+use Recruitment\Entity\Exception\InvalidTaxRateException;
 use Recruitment\Entity\Exception\InvalidUnitPriceException;
+use Recruitment\Entity\Validator\TaxRateValidator;
 
 class Product
 {
@@ -22,10 +24,26 @@ class Product
      */
     private $minimumQuantity = 1;
 
+    /**
+     * @var int $taxRate
+     */
+    private $taxRate = 0;
+
 
     public function getUnitPrice(): int
     {
         return $this->unitPrice;
+    }
+
+    /**
+     * Important: Take a look at your tax law to check if default rounding works for you.
+     * Ie - in Poland we're using default PHP_ROUND_HALF_UP
+     */
+    public function getGrossUnitPrice(): int
+    {
+        $unitPrice = $this->getUnitPrice();
+        $taxRateMultiplier = $this->getTaxRate()/100;
+        return round($unitPrice * $taxRateMultiplier + $unitPrice);
     }
 
     /**
@@ -68,6 +86,20 @@ class Product
     {
         $this->id = $id;
 
+        return $this;
+    }
+
+    public function getTaxRate(): int
+    {
+        return $this->taxRate;
+    }
+
+    public function setTaxRate(int $taxRate): Product
+    {
+        if (!TaxRateValidator::validateTaxRate($taxRate)) {
+            throw new InvalidTaxRateException;
+        }
+        $this->taxRate = $taxRate;
         return $this;
     }
 }

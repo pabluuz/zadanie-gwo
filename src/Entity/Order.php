@@ -36,18 +36,23 @@ class Order
     {
         $items = [];
         $total_price = 0;
+        $total_gross_price = 0;
         foreach ($this->items as $item) {
             $items[] = [
                 'id' => $item->getProduct()->getId(),
                 'quantity' => $item->getQuantity(),
-                'total_price' => $item->getTotalPrice()
+                'total_price' => $item->getTotalPrice(),
+                'gross_price' => $item->getGrossTotalPrice(),
+                'tax' => $item->getProduct()->getTaxRate()."%"
             ];
             $total_price += $item->getTotalPrice();
+            $total_gross_price += $item->getGrossTotalPrice();
         }
         return [
             'id' => $this->id,
             'items' => $items,
-            'total_price' => $total_price
+            'total_price' => $total_price,
+            'total_gross_price' => $total_gross_price
         ];
     }
 }
