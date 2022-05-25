@@ -17,10 +17,8 @@ class CartTest extends TestCase
     public function itAddsOneProduct(): void
     {
         $product = $this->buildTestProduct(1, 15000);
-
         $cart = new Cart();
         $cart->addProduct($product, 1);
-
         $this->assertCount(1, $cart->getItems());
         $this->assertEquals(15000, $cart->getTotalPrice());
         $this->assertEquals($product, $cart->getItem(0)->getProduct());
